@@ -33,33 +33,33 @@ const pill = (c, label) => (
 const STEPS = [
   {
     icon: "1", color: C.purple,
-    title: "Someone submits a fact",
-    plain: "A user writes a knowledge claim — like 'The boiling point of water at sea level is 100°C' — and backs it with sources.",
-    why: "This builds the database. Anyone can contribute.",
+    title: "Someone writes down a fact",
+    plain: "Any person can submit a knowledge claim — like 'The boiling point of water at sea level is 100°C' — and point to sources that back it up. That's it. No special credentials required.",
+    why: "Anyone can contribute. The more facts in the system, the more useful it is.",
   },
   {
     icon: "2", color: C.blue,
-    title: "The system scores it automatically",
-    plain: "Three math engines check the claim: (1) Does the evidence support it statistically? (2) Do credible sources cite it? (3) Do other verified facts agree?",
-    why: "No human editors. No opinions. Pure math gives it a trust score from 0–100.",
+    title: "The system checks it — no humans involved",
+    plain: "Software automatically asks three questions: Do the sources actually say this? Do other trusted sources agree? Do other verified facts in the database support it? The answers produce a single agreement score.",
+    why: "There are no editors, no committees, no opinions. The score comes from evidence, not authority.",
   },
   {
     icon: "3", color: C.teal,
-    title: "Developers pay to query it",
-    plain: "AI companies, researchers, and apps pay a small fee every time they ask AXIOM a question — like looking up a trusted fact database.",
-    why: "This is where real money enters the system. Not from users — from businesses.",
+    title: "Businesses pay to look things up",
+    plain: "AI companies, research tools, and apps pay a small fee each time they ask AXIOM for a verified fact — the same way you might pay to look something up in a professional database. No subscription. Pay per question.",
+    why: "This is where real money enters the system. It comes from businesses, not from users.",
   },
   {
     icon: "4", color: C.amber,
-    title: "Contributors get paid",
-    plain: "Every query that uses your submitted fact earns you a share of the fee. The higher your fact's trust score, the more it gets queried, the more you earn.",
-    why: "You earn passively. The better your contribution, the more you make.",
+    title: "The person who submitted the fact gets paid",
+    plain: "Every time a business queries your fact, you automatically receive a small cut of their fee. You don't have to do anything — the protocol handles the split and sends it to your account.",
+    why: "Your earnings grow as long as your fact keeps getting used. Submit once, earn forever.",
   },
   {
     icon: "5", color: C.coral,
-    title: "The network grows itself",
-    plain: "The system constantly scans for missing knowledge — gaps where developers ask questions but no verified fact exists. It posts bounties for those gaps.",
-    why: "The market demand literally tells the network what to build next. No guesswork.",
+    title: "The system finds its own gaps",
+    plain: "Every hour, AXIOM checks which questions businesses are asking that no verified fact can answer. Those missing pieces become cash bounties, posted automatically and paid to whoever submits the verified answer first.",
+    why: "The demand from real businesses tells the network exactly what to build next — no guesswork, no roadmap meetings.",
   },
 ];
 
@@ -68,24 +68,27 @@ const ROLES = [
     role: "Contributor",
     tagline: "I share knowledge",
     color: C.purple,
-    actions: ["Submit a fact or finding", "Attach sources (papers, data, books)", "Earn every time your fact is queried"],
-    earn: "Per query on your contributions",
-    risk: "Low — bad submissions just score low, no penalty",
+    start: "You write facts, back them with sources, and collect a small fee every time a business looks that fact up.",
+    actions: ["Write a fact and link your sources", "The system checks it automatically — no approval needed", "Earn a cut each time a business queries your fact"],
+    earn: "A share of the fee each time your fact is queried",
+    risk: "Low — a weak submission just scores low and earns little. No penalty.",
   },
   {
     role: "Staker",
     tagline: "I back other facts",
     color: C.teal,
-    actions: ["Browse facts in the marketplace", "Stake AXM tokens on facts you believe in", "Earn a yield when those facts get queried"],
-    earn: "Yield on your staked amount",
-    risk: "Medium — staking wrong facts loses yield",
+    start: "You put tokens behind facts you believe in. When businesses query those facts, you earn a cut of the fee — proportional to how much you put in.",
+    actions: ["Browse already-submitted facts", "Put tokens behind the ones you trust", "Collect a share of the fee each time those facts are queried"],
+    earn: "A share of query fees on every fact you've backed",
+    risk: "Medium — if you back a fact that later scores poorly, your earnings drop.",
   },
   {
     role: "Developer",
     tagline: "I build with it",
     color: C.blue,
-    actions: ["Query the AXIOM API", "Get machine-readable verified facts", "Pay per query, no subscriptions"],
-    earn: "N/A — you pay, you gain accuracy",
+    start: "You query the AXIOM API and get back verified, scored facts your app can trust — without hiring a research team.",
+    actions: ["Call the AXIOM API with a question", "Get back a verified fact and its agreement score", "Pay only for the queries you make — no monthly fee"],
+    earn: "N/A — you pay per query; what you gain is reliable data",
     risk: "None — pay only for what you use",
   },
 ];
@@ -257,6 +260,12 @@ export default function App() {
       {/* How it works */}
       {tab === "how" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ ...surface, marginBottom: 2 }}>
+            <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500 }}>The core loop</p>
+            <p style={{ margin: 0, fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+              Businesses pay to look up facts → that money goes to the people who wrote and backed those facts → that attracts more contributors → the database gets better → more businesses use it. One cycle, self-reinforcing.
+            </p>
+          </div>
           {STEPS.map((s, i) => (
             <div key={i} style={{ ...card, display: "flex", gap: 14, alignItems: "flex-start" }}>
               <div style={{
@@ -279,18 +288,15 @@ export default function App() {
               </div>
             </div>
           ))}
-          <div style={{ ...surface, marginTop: 4 }}>
-            <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500 }}>The self-sustaining loop</p>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
-              More developers querying → more fee revenue → more contributor earnings → more contributors → better knowledge → more developers querying. The system feeds itself.
-            </p>
-          </div>
         </div>
       )}
 
       {/* Roles */}
       {tab === "roles" && (
         <div>
+          <p style={{ margin: "0 0 10px", fontSize: 13, color: "var(--color-text-secondary)" }}>
+            Who are you in this system? Pick the role that fits.
+          </p>
           <div style={{ display: "flex", gap: 8, marginBottom: "1rem", flexWrap: "wrap" }}>
             {ROLES.map((r, i) => (
               <button key={i} onClick={() => setSelectedRole(i)} style={{
@@ -308,14 +314,15 @@ export default function App() {
             const r = ROLES[selectedRole];
             return (
               <div style={card}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div>
                     <p style={{ margin: "0 0 2px", fontSize: 16, fontWeight: 500 }}>{r.role}</p>
                     <p style={{ margin: 0, fontSize: 13, color: "var(--color-text-secondary)" }}>{r.tagline}</p>
                   </div>
                   {pill(r.color, r.role)}
                 </div>
-                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 500, color: "var(--color-text-secondary)" }}>What you do</p>
+                <p style={{ margin: "0 0 14px", fontSize: 14, lineHeight: 1.5 }}>{r.start}</p>
+                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 500, color: "var(--color-text-secondary)" }}>Step by step</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
                   {r.actions.map((a, i) => (
                     <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
@@ -343,9 +350,12 @@ export default function App() {
       {/* Market */}
       {tab === "market" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <p style={{ margin: "0 0 8px", fontSize: 13, color: "var(--color-text-secondary)" }}>
-            Real submitted facts — click any to see its trust breakdown.
-          </p>
+          <div style={{ ...surface, marginBottom: 2 }}>
+            <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500 }}>What you're looking at</p>
+            <p style={{ margin: 0, fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+              Each card is a fact that has been submitted and checked by the system. The number in the ring is an agreement score from 0–100 — it's not a grade. It measures how consistently independent sources, citations, and other verified facts all point to the same conclusion. Click any fact to see how the score breaks down.
+            </p>
+          </div>
           {FACTS.map((f, i) => (
             <div key={i} onClick={() => setExpandedFact(expandedFact === i ? null : i)} style={{
               ...card, cursor: "pointer",
@@ -370,17 +380,20 @@ export default function App() {
               </div>
               {expandedFact === i && (
                 <div style={{ marginTop: 12, paddingTop: 12, borderTop: "0.5px solid var(--color-border-tertiary)" }}>
-                  <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 500 }}>Trust score breakdown</p>
+                  <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500 }}>How the score was calculated</p>
+                  <p style={{ margin: "0 0 10px", fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+                    A score of {f.score.toFixed(1)} means {f.score >= 95 ? "this fact has been cross-checked across a very large number of independent sources and none of them contradict it." : f.score >= 80 ? "this fact is well-supported across most sources checked, with very few contradictions." : "this fact has reasonable support but some sources are still catching up or partially conflicting."}
+                  </p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     {[
-                      { label: "Statistical evidence (Bayesian)", pct: 40, color: C.purple },
-                      { label: "Citation depth & source authority", pct: 35, color: C.teal },
-                      { label: "Peer stake consensus", pct: 25, color: C.amber },
+                      { label: "How many independent sources agree", pct: 40, color: C.purple },
+                      { label: "How credible and linked those sources are", pct: 35, color: C.teal },
+                      { label: "How many people have staked tokens backing it", pct: 25, color: C.amber },
                     ].map(m => (
                       <div key={m.label}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
                           <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>{m.label}</span>
-                          <span style={{ fontSize: 12, fontWeight: 500 }}>{m.pct}% weight</span>
+                          <span style={{ fontSize: 12, fontWeight: 500 }}>{m.pct}% of score</span>
                         </div>
                         <div style={{ background: "var(--color-background-secondary)", borderRadius: 4, height: 5 }}>
                           <div style={{ width: `${(f.score / 100) * m.pct}%`, height: "100%", background: m.color.mid, borderRadius: 4 }} />
@@ -390,9 +403,9 @@ export default function App() {
                   </div>
                   <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     {[
-                      { label: "Weekly earnings", value: `$${f.weeklyEarn.toFixed(2)}` },
-                      { label: "Monthly est.", value: `$${(f.weeklyEarn * 4.3).toFixed(2)}` },
-                      { label: "Total queries", value: f.queries.toLocaleString() },
+                      { label: "Contributor earns / week", value: `$${f.weeklyEarn.toFixed(2)}` },
+                      { label: "Monthly estimate", value: `$${(f.weeklyEarn * 4.3).toFixed(2)}` },
+                      { label: "Queries this week", value: f.queries.toLocaleString() },
                     ].map(m => (
                       <div key={m.label} style={surface}>
                         <p style={{ margin: "0 0 2px", fontSize: 11, color: "var(--color-text-secondary)" }}>{m.label}</p>
@@ -411,11 +424,15 @@ export default function App() {
       {tab === "bounties" && (
         <div>
           <div style={{ ...surface, marginBottom: "1rem" }}>
-            <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500 }}>What are gap bounties?</p>
+            <p style={{ margin: "0 0 6px", fontSize: 13, fontWeight: 500 }}>What is a gap bounty?</p>
+            <p style={{ margin: "0 0 8px", fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+              Imagine a developer's AI tool tries to look up "the long-term side effects of GLP-1 drugs" and AXIOM has no verified fact for it. That gap gets detected automatically. The system posts a cash reward — paid in AXM tokens — to whoever submits the first properly sourced, verified answer.
+            </p>
             <p style={{ margin: 0, fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
-              Every hour the network scans which facts developers are trying to query but can't find. Those missing facts become bounties — paid in AXM tokens to whoever fills the gap first with a verified submission.
+              The reward size is set by how often that question is being asked and how valuable the answer would be. Nobody decides it manually.
             </p>
           </div>
+          <p style={{ margin: "0 0 8px", fontSize: 12, color: "var(--color-text-tertiary)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.5px" }}>Open bounties right now</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {BOUNTIES.map((b, i) => (
               <div key={i} style={card}>
@@ -429,16 +446,16 @@ export default function App() {
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <p style={{ margin: "0 0 2px", fontSize: 18, fontWeight: 500, color: C.amber.text }}>{b.reward} AXM</p>
-                    <p style={{ margin: 0, fontSize: 11, color: "var(--color-text-tertiary)" }}>bounty reward</p>
+                    <p style={{ margin: 0, fontSize: 11, color: "var(--color-text-tertiary)" }}>first to verify wins this</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div style={{ marginTop: "0.875rem", ...surface, border: `0.5px solid ${C.amber.border}`, background: C.amber.bg }}>
-            <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 500, color: C.amber.text }}>Bounties are not posted by people.</p>
+            <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 500, color: C.amber.text }}>Nobody posts these. The system does.</p>
             <p style={{ margin: 0, fontSize: 13, color: C.amber.text, lineHeight: 1.5 }}>
-              They are detected automatically by the graph. Developer demand × citation void × adjacent fact confidence = bounty value. You cannot fake a gap or game the reward size.
+              Bounties are generated by real developer demand — questions that got asked but couldn't be answered. The reward size reflects how urgently that gap needs to be filled. You can't fake demand, and you can't game the reward.
             </p>
           </div>
         </div>
@@ -448,23 +465,26 @@ export default function App() {
       {tab === "simulate" && (
         <div>
           <div style={{ ...card, marginBottom: 10 }}>
-            <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 500 }}>How much can you earn as a Staker?</p>
-            <p style={{ margin: "0 0 10px", fontSize: 13, color: "var(--color-text-secondary)" }}>
-              Stakers back existing facts with AXM tokens. When those facts get queried by developers, you earn a share of the fee — proportional to your stake.
+            <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 500 }}>Earnings calculator — Staker role</p>
+            <p style={{ margin: "0 0 4px", fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+              A Staker puts tokens behind facts they believe in.
+            </p>
+            <p style={{ margin: "0 0 14px", fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+              When a business queries one of those facts through the API, the fee gets split — part goes to the person who submitted the fact, part goes to everyone who staked tokens on it. Move the slider to see what your cut would look like.
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <span style={{ fontSize: 13, color: "var(--color-text-secondary)", whiteSpace: "nowrap" }}>Your stake</span>
+              <span style={{ fontSize: 13, color: "var(--color-text-secondary)", whiteSpace: "nowrap" }}>Tokens you put in</span>
               <input type="range" min={50} max={5000} step={50} value={stakeAmt}
                 onChange={e => setStakeAmt(Number(e.target.value))} style={{ flex: 1 }} />
               <span style={{ fontSize: 14, fontWeight: 500, minWidth: 72, textAlign: "right" }}>{stakeAmt} AXM</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 8 }}>
               {[
-                { label: "Daily yield", value: `$${(weeklyYield / 7).toFixed(3)}` },
-                { label: "Weekly yield", value: `$${weeklyYield.toFixed(2)}` },
-                { label: "Annual yield", value: `$${annualYield.toFixed(0)}` },
-                { label: "APY", value: `${apy.toFixed(1)}%` },
-                { label: "Break-even", value: `${Math.ceil(stakeAmt / (stakeAmt * 0.00082))} days` },
+                { label: "You earn per day", value: `$${(weeklyYield / 7).toFixed(3)}` },
+                { label: "You earn per week", value: `$${weeklyYield.toFixed(2)}` },
+                { label: "You earn per year", value: `$${annualYield.toFixed(0)}` },
+                { label: "Annual return rate", value: `${apy.toFixed(1)}%` },
+                { label: "Days to earn your stake back", value: `${Math.ceil(stakeAmt / (stakeAmt * 0.00082))} days` },
                 { label: "Network tier", value: stakeAmt > 2000 ? "Top 5%" : stakeAmt > 500 ? "Top 20%" : "Entry" },
               ].map(m => (
                 <div key={m.label} style={surface}>
@@ -475,9 +495,9 @@ export default function App() {
             </div>
           </div>
           <div style={{ ...surface, border: `0.5px solid ${C.teal.border}`, background: C.teal.bg }}>
-            <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500, color: C.teal.text }}>Where does the yield actually come from?</p>
+            <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500, color: C.teal.text }}>This is real fee revenue — not new tokens.</p>
             <p style={{ margin: 0, fontSize: 13, color: C.teal.text, lineHeight: 1.5 }}>
-              Developer API fees → split between the contributor who submitted the fact, and stakers who backed it. No inflation. No token printing. Real business revenue, distributed by the protocol.
+              Your earnings come from the fees businesses pay to query the API. When a developer's app looks up a fact you've staked, you get a cut of what they paid. The protocol handles the split automatically. No new tokens are created to pay you.
             </p>
           </div>
         </div>
